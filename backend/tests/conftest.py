@@ -11,7 +11,6 @@ iso_date_end = datetime(2022, 3, 1, 13, 0, 0, tzinfo=timezone.utc)
 student_data = {
     "name": "dan gullis",
     "email": "dan@test.com",
-    "password": "123",
     "status": "student"
 }
 
@@ -24,7 +23,6 @@ availability_data = {
 tutor_data1 = {
     "name": "kat",
     "email": "katt@test.com",
-    "password": "123",
     "status": "tutor",
     "availability": availability_data
 }
@@ -32,7 +30,6 @@ tutor_data1 = {
 tutor_data2 = {
     "name": "muhtadi",
     "email": "muhtadi@test.com",
-    "password": "123",
     "status": "tutor",
     "availability": availability_data
 }
