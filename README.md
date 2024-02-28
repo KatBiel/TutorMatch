@@ -17,6 +17,10 @@
 4. pipenv install flask pymongo
 5. pip install pytest
 6. pip install python-dotenv
+8. pip install mongoose
+9. pip install -U flask-cors
+10. pip install Flask
+
 
 
 Group flow Trello board:
@@ -24,3 +28,5 @@ https://trello.com/b/Sea5ymWg/tutormatch
 
 Design:
 https://miro.com/app/board/uXjVNoChLNw=/
+
+npm i flask & pip install -U flask-cors
