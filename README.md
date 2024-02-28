@@ -29,4 +29,3 @@ https://trello.com/b/Sea5ymWg/tutormatch
 Design:
 https://miro.com/app/board/uXjVNoChLNw=/
 
-npm i flask & pip install -U flask-cors
