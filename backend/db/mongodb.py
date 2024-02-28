@@ -1,23 +1,23 @@
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+import pymongo
+import json
 
 load_dotenv()
-db_name= os.getenv('DB_NAME')
+client = MongoClient("MONGO_URL")
+db = client["tutormatch"]
+users_collection = db["users"]
+#collection = db["subjects"]
+#collection = db["bookings"]
 
-mongoClient = MongoClient('mongodb://127.0.0.1:27017')
-db = mongoClient.get_database(db_name)
-
-users_collection = db.get_collection('users')
-subjects_collection = db.get_collection('subjects')
-bookings_collection = db.get_collection('bookings')
-
-
-def get_users_collection():
-    return users_collection
-
-def get_subjects_collection():
-    return subjects_collection
-
-def get_bookings_collection():
-    return bookings_collection
+#Dummy Data To Test
+user = {"name": "Adam Peaty", "email": "adam@adam.com", "password": "adam" }
+#subject = {"name": "Math", "Grade": "GCSE" }
+insert_result = users_collection.insert_one(user)
+print("Inserted ID:", insert_result.inserted_id)
+print(users_collection.find_one(insert_result.inserted_id))
+#cursor = users_collection.find()
+#for document in cursor:
+    #print(document)
+client.close()
