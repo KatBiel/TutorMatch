@@ -4,11 +4,21 @@ class Availability:
         self.end_time = end_time
         self.available = available
 
+    def __repr__(self):
+        return f'Availability({self.start_time}, {self.end_time}, {self.available})'
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
 class User:
-    def __init__(self, name, email, password, status, availability=None):
+    def __init__(self, name, email, status, availability=None):
         self.name = name
         self.email = email
-        self.password = password
         self.status = status
         self.availability = availability
 
+    def __repr__(self):
+        return f'User({self.name}, {self.email}, {self.status}, {self.availability})'
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
