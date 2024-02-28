@@ -1,5 +1,6 @@
 from db.mongodb import get_users_collection
 from flask import Flask, redirect, url_for, request, jsonify
+from bson import ObjectId
 
 users_collection = get_users_collection()
 
@@ -7,13 +8,18 @@ users_collection = get_users_collection()
 
 def update_bio(userId, bioContent):
     users_collection = get_users_collection()
+    
 
     try:
-        filter_criteria = {"_id": userId}  
+        filter_criteria = {"_id": ObjectId(userId)}  
         update_data = {"$set": {"bio": bioContent}} 
         result = users_collection.update_one(filter_criteria, update_data)
         
-        return result
+        if result.matched_count == 0:
+            return {"error": "User not found with the specified ID"}
+
+        return {"message": "Update bio successful"}
+
 
     except Exception as e:
         return e
@@ -21,6 +27,7 @@ def update_bio(userId, bioContent):
 
 
 def signup():
+    print("modules triggered")
     data = request.json
     name = data.get("name")
     email = data.get("email")

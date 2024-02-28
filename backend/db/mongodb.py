@@ -4,15 +4,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 db_name= os.getenv('DB_NAME')
+try: 
+    mongoClient = MongoClient('mongodb://127.0.0.1:27017')
+    db = mongoClient.get_database(db_name)
 
-mongoClient = MongoClient('mongodb://127.0.0.1:27017')
-db = mongoClient.get_database(db_name)
+    users_collection = db.get_collection('users')
+    subjects_collection = db.get_collection('subjects')
+    bookings_collection = db.get_collection('bookings')
 
-users_collection = db.get_collection('users')
-subjects_collection = db.get_collection('subjects')
-bookings_collection = db.get_collection('bookings')
-
-
+except Exception as e:
+    print(f"Error connecting to the database: {e}")
+    
 def get_users_collection():
     return users_collection
 

@@ -14,21 +14,22 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 cred = credentials.Certificate('firebaseServiceAccountKey.json')
-firebase_admin = initialise_app(cred)
+firebase_admin = initialize_app(cred)
 
-@app.route('/users/<int:userId>/bio', methods=['PUT'])
+@app.route('/users/<string:userId>/bio', methods=['PUT'])
 def update_user_bio(userId):
     data = request.json
     bioContent = data.get('bio')
 
     try:
         update_bio(userId, bioContent)
-        return jsonify({'message': 'Update bio successful'})
+        return jsonify({'message': 'Update bio successful'}), 200
     except Exception as e:
         return jsonify({'error': f'Error updating bio: {str(e)}'}), 500
 
 @app.route("/signup", methods=["POST"])
 def signup_route():
+    print("im triggered")
     return signup()
 
 if __name__ == '__main__':
