@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -44,8 +45,12 @@ const Signup = () => {
                         await signup(name, email, status)
                         navigate("/profile");
                     } catch(error){
+                        if (error.code === "auth/email-already-in-use") {
+                            setNotice("Email is already in use. Please try logging in instead.");
+                        } else {
                         setNotice("Sorry, something went wrong. Please try again.");
-                    }     
+                        }
+                    }
                 } else {
                     setNotice("Passwords don't match. Please try again.");
                 }
