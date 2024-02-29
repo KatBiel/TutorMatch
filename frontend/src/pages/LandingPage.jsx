@@ -94,7 +94,7 @@ const LandingPage = () => {
                     <span className="star" style={{ fontSize: '24px' }}>&#9733;</span>
                     <span className="star" style={{ fontSize: '24px' }}>&#9733;</span>
                 </div>
-                <p>"TutorMatch helped me find a tutor that I can vibe with!"</p>
+                <p>"TutorMatch helped me find a tutor that I can connect to!"</p>
             </div>
         </div>
         <div className="col-md-4">
