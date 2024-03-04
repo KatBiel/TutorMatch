@@ -1,0 +1,4 @@
+- name: static-site
+  type: web
+  buildCommand: npm run build
+  publishDir: build

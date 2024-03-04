@@ -4,17 +4,35 @@ from flask_cors import CORS, cross_origin
 from datetime import datetime, timezone
 from bson import BSON
 import json
+import os
 from firebase_admin import credentials, initialize_app
 from modules.users import signup, update_bio, get_user_by_id, add_availability_for_tutor, UserNotFoundError
-from modules.subjects import add_tutor_to_a_subject_grade, search_by_subject_and_grade, returnSubjects, TutorAddingError, SubjectGradeNotFoundError
 
+from modules.subjects import add_tutor_to_a_subject_grade, search_by_subject_and_grade, TutorAddingError, SubjectGradeNotFoundError, returnSubjects
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-cred = credentials.Certificate('firebaseServiceAccountKey.json')
+cred = credentials.Certificate({
+    "type": "service_account",
+    "project_id": os.environ['FB_PROJECT_ID'],
+    "private_key_id": os.environ['FB_PRIVATE_KEY_ID'],
+    "private_key": os.environ['FB_PRIVATE_KEY'].replace('\\n', '\n'),
+    "client_email": os.environ['FB_EMAIL_CLIENT_EMAIL'],
+    "client_id": os.environ['FB_CLIENT_ID'],
+    "auth_uri": os.environ['FB_AUTH_URI'],
+    "token_uri": os.environ['FB_TOKEN_URI'],
+    "auth_provider_x509_cert_url": os.environ['FB_AUTH_PROVIDER'],
+    "client_x509_cert_url": os.environ['FB_CLIENT'],
+    "universe_domain": os.environ['DB_UNIVERSE_DOMAIN']
+})
+
 firebase_admin = initialize_app(cred)
 
 @app.route("/signup", methods=["POST"])
