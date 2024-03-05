@@ -9,6 +9,7 @@ import { AddSubject } from "../components/AddSubject";
 import { AddAvailability } from "../components/AddAvailability";
 import UserProfile from "../components/User";
 import ProfileSubjects from "../components/ProfileSubjects";
+import axios from 'axios';
 
 
 const DEFAULT_PFP = "https://res.cloudinary.com/dzkvzncgr/image/upload/v1707228333/ph2p8wvxud1qbsqqfxqk.png";
@@ -74,33 +75,36 @@ const Profile = () => {
         }
     };
     
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (image) {
             const imageRef = ref(storage, `profile-images/${image.name}`);
             const uploadTask = uploadBytesResumable(imageRef, image);
             // Event listeners:
             // When you perform an upload or download operation, Firebase Storage provides you with a snapshot object that allows you to monitor the progress of the task and handle various events related to it.
             uploadTask.on('state_changed',
-            (snapshot) => {
-                console.log('Uploaded file succesfully')
-            },
-            (error) => {
-                console.log(error);
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    // Update user details with the download URL of the uploaded image
-                    setUserDetails((prevDetails) => ({
-                        ...prevDetails,
-                        profilePicture: downloadURL,
-                    }));
-                }).catch((error) => {
+                (snapshot) => {
+                    console.log('Uploaded file succesfully')
+                },
+                (error) => {
                     console.log(error);
-                });
-            }
-        );
-    }
-};
+                },
+                async () => {
+                    try {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
+                        // Update user details with the download URL of the uploaded image
+                        setUserDetails((prevDetails) => ({
+                            ...prevDetails,
+                            profilePicture: downloadURL,
+                        }));
+
+                    await axios.post(`/api/users/${firebase_id}/profile-picture`, { profilePictureUrl: downloadURL });
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            );
+        }
+    };
 
     return(
         <>
