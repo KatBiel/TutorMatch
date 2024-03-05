@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { auth, storage } from "../firebase";
+import { auth, storage, storageRef } from "../firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useAuth } from "../components/authContext";
 import { getUser } from "../services/users";
 import { searchSubjects } from "../services/subjects";
@@ -8,7 +9,7 @@ import { AddSubject } from "../components/AddSubject";
 import { AddAvailability } from "../components/AddAvailability";
 import UserProfile from "../components/User";
 import ProfileSubjects from "../components/ProfileSubjects";
-import profilePicture from "../images/profilePicture.png";
+
 
 const DEFAULT_PFP = "https://res.cloudinary.com/dzkvzncgr/image/upload/v1707228333/ph2p8wvxud1qbsqqfxqk.png";
 
@@ -74,11 +75,12 @@ const Profile = () => {
     };
     
     const handleUpload = () => {
-        // const storage = getStorage()
         if (image) {
-            const uploadTask = storage.ref(`profile-images/${image.name}`).put(image);
-            uploadTask.on(
-            'state_changed',
+            const imageRef = ref(storage, `profile-images/${image.name}`);
+            const uploadTask = uploadBytesResumable(imageRef, image);
+            // Event listeners:
+            // When you perform an upload or download operation, Firebase Storage provides you with a snapshot object that allows you to monitor the progress of the task and handle various events related to it.
+            uploadTask.on('state_changed',
             (snapshot) => {
                 console.log('Uploaded file succesfully')
             },
@@ -86,11 +88,11 @@ const Profile = () => {
                 console.log(error);
             },
             () => {
-                uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-                    // Update user details with profile picture URL
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    // Update user details with the download URL of the uploaded image
                     setUserDetails((prevDetails) => ({
                         ...prevDetails,
-                        profilePicture: url,
+                        profilePicture: downloadURL,
                     }));
                 }).catch((error) => {
                     console.log(error);
@@ -99,7 +101,6 @@ const Profile = () => {
         );
     }
 };
-    
 
     return(
         <>
