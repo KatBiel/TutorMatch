@@ -1,4 +1,5 @@
-const BACKEND_URL = "http://localhost:5000";
+const BACKEND_URL = process.env.REACT_APP_PROD_BACKEND_URL
+
 
 export const requestBooking = async (tutorId, studentId, start_time) => {
     const payload = {
