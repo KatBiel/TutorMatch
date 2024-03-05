@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../services/users";
 import { useAuth } from "../components/authContext";
 
+const DEFAULT_PFP = "https://res.cloudinary.com/dzkvzncgr/image/upload/v1707228333/ph2p8wvxud1qbsqqfxqk.png";
+
 const Signup = () => {
     const navigate = useNavigate();
     const { storeUserDataMongoDB, mongoUser } = useAuth();
@@ -45,7 +47,7 @@ const Signup = () => {
                     try {
                         await createUserWithEmailAndPassword(auth, email, password);
                         firebase_id = auth.currentUser.uid
-                        const result = await signup(firebase_id, name, email, status)
+                        const result = await signup(firebase_id, name, email, status, DEFAULT_PFP)
                         storeUserDataMongoDB(result.user)
 
                         if (status === "Student"){

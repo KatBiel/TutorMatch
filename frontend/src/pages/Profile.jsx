@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { auth } from "../firebase";
+import { auth, storage } from "../firebase";
 import { useAuth } from "../components/authContext";
 import { getUser } from "../services/users";
 import { searchSubjects } from "../services/subjects";
@@ -8,6 +8,9 @@ import { AddSubject } from "../components/AddSubject";
 import { AddAvailability } from "../components/AddAvailability";
 import UserProfile from "../components/User";
 import ProfileSubjects from "../components/ProfileSubjects";
+import profilePicture from "../images/profilePicture.png";
+
+const DEFAULT_PFP = "https://res.cloudinary.com/dzkvzncgr/image/upload/v1707228333/ph2p8wvxud1qbsqqfxqk.png";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -15,6 +18,7 @@ const Profile = () => {
     const handle = useParams()
     const firebase_id = handle.id
     const [userDetails, setUserDetails] = useState({})
+    const [image, setImage] = useState(null)
 
     const [gcse, setGcse] = useState([])
     const [alevel, setAlevel] = useState([])
@@ -32,7 +36,6 @@ const Profile = () => {
     const minDate = new Date();
     const maxDate = new Date("01/01/2025 01:00 AM");
     const dateValue = new Date()
-
 
 
     useEffect(() => {
@@ -63,6 +66,41 @@ const Profile = () => {
             })
     },[]);
 
+
+    const handleImageChange = (e) => {
+        if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    };
+    
+    const handleUpload = () => {
+        // const storage = getStorage()
+        if (image) {
+            const uploadTask = storage.ref(`profile-images/${image.name}`).put(image);
+            uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                console.log('Uploaded file succesfully')
+            },
+            (error) => {
+                console.log(error);
+            },
+            () => {
+                uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+                    // Update user details with profile picture URL
+                    setUserDetails((prevDetails) => ({
+                        ...prevDetails,
+                        profilePicture: url,
+                    }));
+                }).catch((error) => {
+                    console.log(error);
+                });
+            }
+        );
+    }
+};
+    
+
     return(
         <>
         <div className = "container-fluid">
@@ -71,7 +109,7 @@ const Profile = () => {
         {userDetails.status === "Tutor" && <h2>Tutor Details</h2> }
         {userDetails.status === "Student" && <h2>Student Details</h2>}
         <div className = "profile">
-            <UserProfile user = {userDetails} />
+            <UserProfile user = {userDetails} defaultPicture = {DEFAULT_PFP}/>
         </div>
         {userDetails.status === "Tutor" &&
         <ProfileSubjects gcse = {gcse} alevel = {alevel} />}
@@ -88,6 +126,12 @@ const Profile = () => {
             <AddAvailability firebaseId = {firebase_id}/>
         </div> }
 
+        {user.uid === firebase_id && (
+        <div>
+          <input type="file" onChange={handleImageChange} />
+          <button onClick={handleUpload}>Upload</button>
+        </div>
+      )}
         </>
     )    
 }

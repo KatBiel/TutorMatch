@@ -29,3 +29,8 @@ yarn-error.log*
 #firebase admin certificate
 firebaseServiceAccountKey.json
 firebase.js
+
+subjects.cpython-311
+users.cpython-311
+
+modules/__pycache__
