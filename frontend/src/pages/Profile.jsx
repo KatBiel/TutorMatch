@@ -101,7 +101,6 @@ const Profile = () => {
                     console.log(result)
                     
                 })
-            setImage(null);
             } catch (error) {
                 console.log(error);
             }
