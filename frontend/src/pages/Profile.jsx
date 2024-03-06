@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { auth, storage, storageRef } from "../firebase";
+import { storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useAuth } from "../components/authContext";
 import { getUser } from "../services/users";
@@ -15,10 +15,11 @@ import RequestedBookingsScrollable from "../components/RequestedBookingsScrollab
 import UserProfile from "../components/User";
 import ProfileSubjects from "../components/ProfileSubjects";
 import { addProfilePicture } from "../services/users";
+import PendingTutorList from "../components/PendingTutors";
 
 
 const DEFAULT_PFP = "https://res.cloudinary.com/dzkvzncgr/image/upload/v1707228333/ph2p8wvxud1qbsqqfxqk.png";
-import PendingTutorList from "../components/PendingTutors";
+
 
 
 const Profile = () => {
@@ -115,11 +116,10 @@ const Profile = () => {
                         profileImage: downloadURL,
                     })));
                     const result = await addProfilePicture(firebase_id, downloadURL)
-                    console.log(result)
                     
                 })
             } catch (error) {
-                console.log(error);
+                console.log("error", error);
             }
     };
     }
