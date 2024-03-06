@@ -4,7 +4,6 @@ import { Form, Button } from 'react-bootstrap';
 import { updateBio } from '../services/users';
 
 const AboutMe = ({ userDetails, firebase_id, setUserDetails }) => {
-    //console.log(userDetails.bio)
     const [bio, setBio] = useState(userDetails.bio);
     const [Editing, setIsEditing] = useState(false)
 
@@ -12,7 +11,6 @@ const AboutMe = ({ userDetails, firebase_id, setUserDetails }) => {
     const handleChangeBio = (e) => {
         console.log(e.target.value);
         setBio(e.target.value);
-        //console.log("CHECK CONSOLE.")
         console.log(bio)
       };
 
@@ -30,26 +28,12 @@ const AboutMe = ({ userDetails, firebase_id, setUserDetails }) => {
     
       return (
         <div>
-            {/* Bios for Students/Tutors */}
-            <div>
-                {userDetails.status === "Tutor" && (
-                    <div>
-                        <h2>Tutor Bio</h2>
-                    </div>
-                )}
 
-                {userDetails.status === "Student" && (
-                    <div>
-                        <h2>Student Bio</h2> 
-                    </div>
-                )}
-            </div>
             
             {/* Updating Bio */}
             {Editing ? (
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="bioTextArea">
-                        {/* <Form.Label>Bio</Form.Label>*/}
                         <Form.Control
                             as="textarea"
                             rows={3}
@@ -64,7 +48,6 @@ const AboutMe = ({ userDetails, firebase_id, setUserDetails }) => {
                 </Form>
             ) : (
                 <>
-                    <p>{bio}</p>
                     <Button variant="primary" onClick={() => setIsEditing(true)}>
                         Edit Bio
                     </Button>
