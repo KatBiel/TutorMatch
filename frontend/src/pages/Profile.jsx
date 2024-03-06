@@ -194,7 +194,7 @@ const Profile = () => {
           <input type="file" onChange={handleImageChange} />
           <button onClick={handleUpload}>Upload</button>
         </div>
-      )}
+    )}
         </>
     )    
 }
