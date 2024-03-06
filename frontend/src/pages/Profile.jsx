@@ -87,24 +87,58 @@ const Profile = () => {
                 },
                 (error) => {
                     console.log(error);
+                    console.log('log after error')
                 },
-                async () => {
-                    try {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
-                        // Update user details with the download URL of the uploaded image
-                        setUserDetails((prevDetails) => ({
-                            ...prevDetails,
-                            profilePicture: downloadURL,
-                        }));
+                );
+                console.log('log before try')
+            try {
+                console.log('Getting download url')
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref)
+                // Update user details with the download URL of the uploaded image
+                console.log('Downloaded URL:', downloadURL)
+                setUserDetails((prevDetails) => ({
+                    ...prevDetails,
+                    profilePicture: downloadURL,
+                }));
 
-                    await axios.post(`/api/users/${firebase_id}/profile-picture`, { profilePictureUrl: downloadURL });
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-            );
+            await axios.put(`/api/users/${firebase_id}/profile-picture`, { profilePictureUrl: downloadURL });
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
+
+//     const handleUpload = () => {
+//         if (image) {
+//             const imageRef = ref(storage, `profile-images/${image.name}`);
+//             const uploadTask = uploadBytesResumable(imageRef, image);
+//             // Event listeners .on():
+//             // When you perform an upload or download operation, Firebase Storage provides you with a snapshot object that allows you to monitor the progress of the task and handle various events related to it.
+//             uploadTask.on('state_changed',
+//             (snapshot) => {
+//                 console.log('Uploaded file succesfully')
+//             },
+//             (error) => {
+//                 console.log(error);
+//             },
+//             () => {
+//                 getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+//                     console.log('Download URL:', url)
+//                     // Update user details with the download URL of the uploaded image
+//                     setUserDetails((prevDetails) => ({
+//                         ...prevDetails,
+//                         profilePicture: url,
+//                     }));
+                    
+//                     // await axios.post(`/api/users/${firebase_id}/profile-picture`, { profilePictureUrl: downloadURL });
+//                 }).catch((error) => {
+//                     console.log(error);
+//                 });
+//             }
+//         );
+//     }
+// };
+
 
     return(
         <>
