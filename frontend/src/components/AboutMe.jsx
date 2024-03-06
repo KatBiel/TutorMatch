@@ -49,7 +49,7 @@ const AboutMe = ({ userDetails, firebase_id, setUserDetails }) => {
             ) : (
                 <>
                     <Button variant="primary" onClick={() => setIsEditing(true)}>
-                        Edit Bio
+                        Edit About Me
                     </Button>
                 </>
             )}

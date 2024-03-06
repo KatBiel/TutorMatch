@@ -4,7 +4,7 @@ const UserProfile = (props) => {
         <article key = {props.user.firebase_id}>
             Name: {props.user.name} <br/>
             Email: {props.user.email}<br/>
-            Bio: {props.user.bio}
+            About Me: {props.user.bio}
         </article>
         
     )
