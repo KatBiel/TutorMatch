@@ -9,7 +9,6 @@ import { AddSubject } from "../components/AddSubject";
 import { AddAvailability } from "../components/AddAvailability";
 import UserProfile from "../components/User";
 import ProfileSubjects from "../components/ProfileSubjects";
-import axios from 'axios';
 import { addProfilePicture } from "../services/users";
 
 
