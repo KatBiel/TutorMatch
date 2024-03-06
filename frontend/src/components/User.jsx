@@ -1,9 +1,9 @@
 const UserProfile = (props) => {
     return (
         <article key={props.user.firebase_id}>
-        {props.user.profilePicture ? (
+        {props.user.profileImage ? (
             <img
-            src={props.user.profilePicture}
+            src={props.user.profileImage}
             alt="Profile"
             style={{ width: "100px", height: "100px", borderRadius: "50%" }}
             />
