@@ -34,3 +34,4 @@ subjects.cpython-311
 users.cpython-311
 
 modules/__pycache__
+backend/modules/__pycache__/subjects.cpython-311.pyc
