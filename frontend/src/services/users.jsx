@@ -98,7 +98,6 @@ export const addAvailability = async (firebase_id, idToken, startTime, endTime) 
 
 }
 
-<<<<<<< HEAD
 export const addProfilePicture = async (firebase_id, profilePictureUrl) => {
     
     const payload = {
@@ -120,15 +119,15 @@ export const addProfilePicture = async (firebase_id, profilePictureUrl) => {
         if (response.status === 201) {
             return data;
         } else {
-            console.error("Error adding profile picture:", data.message);
+            console.error("Error adding profile picture:", data.error);
             throw new Error(data.message);
         }
     } catch (error){
         console.error("Unexpected error:", error);
         throw error;
     }
+}
 
-=======
 export const getPendingTutors = async(idToken) => {
     const requestOptions = {
         method: "GET",
@@ -167,5 +166,4 @@ export const updatePendingTutor = async(idToken,firebase_id) => {
         throw new Error (await response.json().then((data) => data.message));
     }
     
->>>>>>> main
 }

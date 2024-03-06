@@ -215,6 +215,17 @@ def get_user(userId):
     
     except Exception as e:
         return jsonify({'error': f'Error finding user: {str(e)}'}), 500
+    
+@app.route('/users/<string:firebase_id/profile-picture>', methods=['POST'])
+def update_profile_picture_route(firebase_id):
+    data = request.json
+    profilePictureUrl = data.get('profilePictureUrl')
+
+    result = update_profile_picture(firebase_id, profilePictureUrl)
+    status_code = result.get("status_code", 500)
+    return jsonify(result), status_code
+
+
 
 
 if __name__ == '__main__':

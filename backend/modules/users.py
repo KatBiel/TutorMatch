@@ -167,11 +167,21 @@ def approve_tutor(firebase_id):
         result = users_collection.update_one(filter_criteria,update_data)
     
         if result.matched_count == 0:
-           raise UserNotFoundError('User not found')
+            raise UserNotFoundError('User not found')
         else: 
             return {"message": "Update bio successful"}
         
     except Exception as e:
         raise ValueError(f'Error updating bio: {str(e)}')
     
+def update_profile_picture(firebase_id, profilePitureUrl):
+    try:
+        result = users_collection.update_one({"firebase_id":firebase_id}, {"$set": {"profileImage": profilePitureUrl}})
+
+        if result.matched_count == 0:
+            return {"sucess": False, "error": "unable to update profile picture URL", "status_code": 404}
+        else:
+            return {"sucess": True, "error": "profile picture URL updated", "status_code": 201}
+    except Exception as e:
+        raise ValueError(f'Error updating profile picture URL: {str(e)}')
         
