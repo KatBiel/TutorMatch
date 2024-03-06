@@ -9,7 +9,7 @@ const UserProfile = (props) => {
             />
         ) : (
             <img
-            src={props.defaultPicture} // Use the default picture URL directly
+            src={props.defaultPicture} 
             alt="Default Profile"
             style={{ width: "100px", height: "100px", borderRadius: "50%" }}
             />

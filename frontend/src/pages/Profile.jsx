@@ -21,6 +21,7 @@ const Profile = () => {
     const firebase_id = handle.id
     const [userDetails, setUserDetails] = useState({})
     const [image, setImage] = useState(null)
+    
 
     const [gcse, setGcse] = useState([])
     const [alevel, setAlevel] = useState([])
@@ -89,15 +90,18 @@ const Profile = () => {
                     console.log(error);
                 },
                 );
+
             try {
                 await getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-                    setUserDetails((prevDetails) => ({
+                    setUserDetails((prevDetails => ({
                         ...prevDetails,
-                        profilePicture: downloadURL,
-                    }));
+                        profileImage: downloadURL,
+                    })));
                     const result = await addProfilePicture(firebase_id, downloadURL)
                     console.log(result)
+                    
                 })
+            setImage(null);
             } catch (error) {
                 console.log(error);
             }
