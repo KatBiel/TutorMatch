@@ -2,21 +2,31 @@ import { Nav, Navbar, Container } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './authContext';
 import { auth } from "../firebase";
+import { useState } from 'react';
+import firebase from '../firebase';
+
 
 
 
 const TutorMatchNavbar = () => {
     const navigate = useNavigate();
-    const { user, mongoUser, storeUserDataMongoDB } = useAuth()
+    const { user, mongoUser, signOutAuth } = useAuth()
+    const [signOutError, setSignOutError] = useState("")
 
     const handleLogout = async (e) => {
         e.preventDefault();
-
-        await auth.signOut();
-        storeUserDataMongoDB(null)
-        navigate("/");
+        const signOutResult = signOutAuth()
+        if (signOutResult.success){
+            navigate("/")
+        } else {
+            setSignOutError(signOutResult.message)
+        }
     }
 
+    //console.log("mongoUser")
+    //console.log(mongoUser)
+    //console.log("user")
+    //console.log(user)
 
     return (
         <Navbar bg="primary" variant="dark" expand="lg" className="fixed-top-custom" style={{ marginBottom: '20px' }}>
@@ -54,4 +64,6 @@ const TutorMatchNavbar = () => {
 };
 
 
+
 export default TutorMatchNavbar;
+

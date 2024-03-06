@@ -22,14 +22,17 @@ def add_tutor_to_a_subject_grade(firebase_id, subject, grade):
         if result.matched_count == 1:
             if result.modified_count == 0: 
                 # User was already in the tutors list for the given grade
-                raise TutorAddingError('Tutor already added to subject and grade')
+                raise TutorAddingError('You have already added this subject and grade.')
             else:
-                return {'message': 'Tutor added successfully'}
+                return {'message': 'Subject and grade added successfully.'}
         else:
             raise SubjectGradeNotFoundError('Subject or grade not found')
-
+    except TutorAddingError as tae:
+        raise tae
+    except SubjectGradeNotFoundError as sgnfe:
+        raise sgnfe
     except Exception as e:
-        raise ValueError(f'Error adding tutor: {str(e)}')
+        raise ValueError(f'{str(e)}')
     
 
 def search_by_subject_and_grade(subject, grade):
@@ -46,8 +49,8 @@ def search_by_subject_and_grade(subject, grade):
             tutor_firebase_ids = result.get(grade, [])
             print("fb ids", tutor_firebase_ids)
             
-            #iterates through list of tutur_firebase_ids to find the corresponding tutor from the users collection.
-                    #adds the tutos documents to the tutor_information array
+            #iterates through list of tutor_firebase_ids to find the corresponding tutor from the users collection.
+                    #adds the tutors documents to the tutor_information array
             tutor_information = [
                 {**users_collection.find_one({"firebase_id": tutor_firebase_id}, {"_id": 0})}
                 for tutor_firebase_id in tutor_firebase_ids

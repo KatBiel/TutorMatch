@@ -1,23 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../services/users";
 import { useAuth } from "../components/authContext";
+import Spinner from 'react-bootstrap/Spinner';
+import { sendEmail } from "../services/emailCommunications";
+
 
 const DEFAULT_PFP = "https://res.cloudinary.com/dzkvzncgr/image/upload/v1707228333/ph2p8wvxud1qbsqqfxqk.png";
 
 const Signup = () => {
     const navigate = useNavigate();
-    const { storeUserDataMongoDB, mongoUser } = useAuth();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [status, setStatus] = useState("");
+    const [safeguarding, setSafeguarding] = useState("Approved");
     const [notice, setNotice] = useState("");   
     const [passwordPrompt, setPasswordPrompt] = useState([]);
-    var firebase_id = ""
+    const { user, mongoUser, signUpAuth, isLoading  } = useAuth()
+
+    useEffect(() => {
+        if (mongoUser && !isLoading) {
+            if (mongoUser.status === "Student") {
+                navigate(`/search`);
+            } else if (user && user.uid){
+                navigate(`/profile/${user.uid}`);
+            }
+        }
+    }, [mongoUser, isLoading, navigate, user]);
 
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value
@@ -29,6 +40,11 @@ const Signup = () => {
         ];
         setPasswordPrompt(newPrompt);
         setPassword(newPassword);
+    }
+
+    const setTutor = () => {
+        setSafeguarding("Pending")
+        setStatus("Tutor")
     }
 
     
@@ -43,28 +59,25 @@ const Signup = () => {
         if (email) {
             if (emaiLocalPartRegex.test(emailLocalPart)) {
                 if (passwordRegex.test(password)) {
-                  if (password === confirmPassword) {
-                    try {
-                        await createUserWithEmailAndPassword(auth, email, password);
-                        firebase_id = auth.currentUser.uid
-                        const result = await signup(firebase_id, name, email, status, DEFAULT_PFP)
-                        storeUserDataMongoDB(result.user)
+                    if (password === confirmPassword) {
+                        console.log(safeguarding)
+                        const signUpResult = await signUpAuth(email, password, name, status, safeguarding, DEFAULT_PFP)
 
-                        if (status === "Student"){
-                                navigate(`/search`);
+                        if (signUpResult.success === false) {
+                            if (signUpResult.errorType === "emailInUse") {
+                                setNotice("Email is already in use. Please try logging in instead."); 
                             } else {
-                                navigate(`/profile/${firebase_id}`);
+                                setNotice("Sorry, something went wrong. Please try again.");
                             }
-                        
-                    } catch(error){
-                        if (error.code === "auth/email-already-in-use") {
-                            setNotice("Email is already in use. Please try logging in instead."); 
-                        } else {
-                            console.log(error)
-                            setNotice("Sorry, something went wrong. Please try again.");
-                    }     
-                }
-
+                        } else if (signUpResult.success === true) {
+                            setNotice("Sign up successfull!")
+                            if (status === "Student"){
+                                sendEmail(email, "signUpStudent")
+                            } else if (status === "Tutor"){
+                                sendEmail(email, "signUpTutor")
+                            }
+                        } 
+                    }
                 } else {
                     setNotice("Password doesn't meet requirements. Please try again.")
                 }
@@ -78,8 +91,6 @@ const Signup = () => {
 
     }
 
-};
-
 
     return (
         <div className = "container-fluid">
@@ -90,13 +101,13 @@ const Signup = () => {
                 <div className = "container">
                     <div className = "row justify-content-center">
                         <form className = "col-md-4 mt-3 pt-3 pb-3" >
-                            { "" !== notice &&
+                            { notice &&
                                 <div className = "alert alert-warning" role = "alert">
                                     { notice }    
                                 </div>
                             }
                             <div className = "form-floating mb-3">
-                        <input id = "signupName" type = "text" className = "form-control" aria-describedby = "nameHelp" placeholder = "Your Name" value = { name } onChange = { (e) => setName(e.target.value.trim()) }></input>
+                        <input id = "signupName" type = "text" className = "form-control" aria-describedby = "nameHelp" placeholder = "Your Name" value = { name } onChange = { (e) => setName(e.target.value) }></input>
                         <label htmlFor = "signupName" className = "form-label">Enter your name</label>
                         </div>
                         <div className = "form-floating mb-3">
@@ -112,7 +123,7 @@ const Signup = () => {
                             <label htmlFor = "confirmPassword" className = "form-label">Confirm Password</label>
                         </div>
                         <div className="custom-control custom-radio">
-                        <input type="radio" id="customRadio1" name="customRadio" className="custom-control-input" onChange = { (e) => setStatus("Tutor")}></input>
+                        <input type="radio" id="customRadio1" name="customRadio" className="custom-control-input" onChange = { (e) => setTutor()}></input>
                         <label className="custom-control-label" htmlFor="customRadio1">Tutor</label>
                         </div>
                         <div className="custom-control custom-radio">
@@ -132,7 +143,15 @@ const Signup = () => {
                             )}
                             <div className = "mt-3 text-center">
                                 <span>Go back to login? <Link to = "/login">Click here.</Link></span>
-                            </div>                    
+                            </div>  
+
+                            {isLoading && 
+                                <div className="d-flex justify-content-center">
+                                    <Spinner animation="border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </Spinner>
+                                </div>
+                            }
                         </form>
                     </div>
                 </div>

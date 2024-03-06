@@ -6,7 +6,9 @@ import { Alert } from 'react-bootstrap';
 import '../App.css';
 
 
-export const AddAvailability = ({firebaseId}) => {
+
+export const AddAvailability = ({firebaseId, idToken, onChangeAvailability}) => {
+
     const todayDate = new Date()
     todayDate.setHours(0, 0, 0, 0)
 
@@ -21,6 +23,11 @@ export const AddAvailability = ({firebaseId}) => {
 
     const minDate = new Date();
     const maxDate = new Date("01/01/2025 01:00 AM");
+
+    const closeAlert = () => {
+        setErrorMessage("")
+        setSuccessMessage("")
+    }
 
     const handleStartDateChange = (args) => {
         const selectedDate = args.value;
@@ -48,8 +55,9 @@ export const AddAvailability = ({firebaseId}) => {
             setErrorMessage("End date and time must be at least one hour after start date")
         } else {
             setAvailability([startDate, endDate])
+            onChangeAvailability()
             try {
-                await addAvailability(firebaseId, startDate, endDate)
+                await addAvailability(firebaseId, idToken, startDate, endDate)
                 setErrorMessage("")
                 setSuccessMessage("Availability added")
             } catch (error) {
@@ -90,23 +98,18 @@ export const AddAvailability = ({firebaseId}) => {
 
                             <div className= "row-md-4 mt-3 pt-3 pb-3">
                             {errorMessage && 
-                                <Alert variant="info" >
+                                <Alert variant="info" dismissible onClose={closeAlert} >
                                     {errorMessage}
                                 </Alert>
                             }
                             {successMessage && 
-                                <Alert variant="info" >
+                                <Alert variant="info" dismissible onClose={closeAlert} >
                                     {successMessage}
                                 </Alert>
                             }
                             </div>     
                         </Form>
-
-                        
                         </>
-                    
-                        
-                        
                     </div>
                 </div>
             </div>
