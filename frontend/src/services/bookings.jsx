@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:5000";
+const BACKEND_URL = "https://tutormatch.onrender.com";
 
 export const requestBooking = async (tutorId, studentId, start_time, idToken) => {
     const payload = {
