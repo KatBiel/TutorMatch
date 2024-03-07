@@ -27,7 +27,20 @@ app.config['MAIL_DEFAULT_SENDER'] = 'tutor.match01@gmail.com'
 mail = Mail(app)
 
 
-cred = credentials.Certificate('firebaseServiceAccountKey.json')
+cred = credentials.Certificate({
+    "type": "service_account",
+    "project_id": os.environ['FB_PROJECT_ID'],
+    "private_key_id": os.environ['FB_PRIVATE_KEY_ID'],
+    "private_key": os.environ['FB_PRIVATE_KEY'].replace('\\n', '\n'),
+    "client_email": os.environ['FB_EMAIL_CLIENT_EMAIL'],
+    "client_id": os.environ['FB_CLIENT_ID'],
+    "auth_uri": os.environ['FB_AUTH_URI'],
+    "token_uri": os.environ['FB_TOKEN_URI'],
+    "auth_provider_x509_cert_url": os.environ['FB_AUTH_PROVIDER'],
+    "client_x509_cert_url": os.environ['FB_CLIENT'],
+    "universe_domain": os.environ['DB_UNIVERSE_DOMAIN']
+})
+
 firebase_admin = initialize_app(cred)
 
 @app.route("/bookings", methods=["POST"])
