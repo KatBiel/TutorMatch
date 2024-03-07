@@ -1,15 +1,13 @@
-Intro
+# Intro
 
-Objectives
+# Objectives
 
-Project idea - user scenario, what problem does it solve?
+# Project idea - user scenario, what problem does it solve?
 
-Development process
+# Development process
 Learning journey, what did, what learnt & how, highs/lows; behaviours & skills
 
-Features developed
-
-Screenshots
+# Features developed & Screenshots
 
 # Quick start
 Clone the repo to your local machine and run the follling set up from the CLI in the front- and backend folder:
