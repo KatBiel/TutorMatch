@@ -6,9 +6,7 @@ from datetime import datetime, timezone
 from bson import BSON
 import json
 from firebase_admin import credentials, initialize_app
-
 from modules.users import *
-
 from modules.subjects import add_tutor_to_a_subject_grade, search_by_subject_and_grade, returnSubjects, TutorAddingError, SubjectGradeNotFoundError
 from modules.bookings import request_booking, update_booking_request
 from lib.firebase_token_auth import verify_token
