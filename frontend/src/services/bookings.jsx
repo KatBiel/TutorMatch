@@ -1,7 +1,7 @@
 const BACKEND_URL = process.env.REACT_APP_PROD_BACKEND_URL
 
 
-export const requestBooking = async (tutorId, studentId, start_time) => {
+export const requestBooking = async (tutorId, studentId, start_time, idToken) => {
     const payload = {
         tutorId: tutorId,
         studentId: studentId,
@@ -12,29 +12,27 @@ export const requestBooking = async (tutorId, studentId, start_time) => {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${idToken}`
         },
         body: JSON.stringify(payload)
     }
     try {
         const response = await fetch(`${BACKEND_URL}/bookings`, requestOptions);
-        console.log("here 1")
         const data = await response.json();
-        console.log("data", data)
+
         if (response.status === 201) {
             return { "success": true, "message": data.message };
         } else {
             return { "success": false, "error": data.message };
         }
     } catch (error) {
-        console.log("here 2")
-
         console.error("An error occurred requesting a booking:", error);
         return { "error": "An error occurred while processing the request."}
     }
 
 }
 
-export const acceptBooking = async (bookingId, tutorId, bookingTime) => {
+export const acceptBooking = async (bookingId, tutorId, bookingTime, idToken) => {
 
     //tutor id references a firebase_id in users collection
     const payload = {
@@ -47,6 +45,7 @@ export const acceptBooking = async (bookingId, tutorId, bookingTime) => {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`
         },
         body: JSON.stringify(payload)
     };
@@ -66,7 +65,7 @@ export const acceptBooking = async (bookingId, tutorId, bookingTime) => {
     }
 }
 
-export const denyBooking = async (bookingId) => {
+export const denyBooking = async (bookingId, idToken) => {
     
     const payload = {
         status: "denied",
@@ -76,6 +75,7 @@ export const denyBooking = async (bookingId) => {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`
         },
         body: JSON.stringify(payload)
     };
