@@ -30,6 +30,14 @@ def update_bio(firebase_id, bio):
 def get_user_by_id(firebase_id):
     users_collection = get_users_collection()
 
+    user = users_collection.find_one({"firebase_id": firebase_id}, {"_id": 0})
+
+    if user['status'] == "Tutor":
+        print("Tutor")
+    elif user['status'] == "Student":
+        print("Student")
+
+
     try:
         pipeline = [
             {
