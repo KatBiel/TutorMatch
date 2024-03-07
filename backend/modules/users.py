@@ -7,10 +7,9 @@ class UserNotFoundError(Exception):
 class AddAvailabilityError(Exception):
     pass
 
-#create functions in here to add users / update users / delete users etc
 users_collection = get_users_collection()
 
-#Function to Update Bio.
+
 def update_bio(firebase_id, bio):
     users_collection = get_users_collection()
     try:
@@ -29,16 +28,8 @@ def update_bio(firebase_id, bio):
 
 def get_user_by_id(firebase_id):
     users_collection = get_users_collection()
-
     user = users_collection.find_one({"firebase_id": firebase_id}, {"_id": 0})
-
     if user['status'] == "Tutor":
-        print("Tutor")
-    elif user['status'] == "Student":
-        print("Student")
-
-
-    try:
         pipeline = [
             {
                 "$match": {"firebase_id": firebase_id}
@@ -55,6 +46,42 @@ def get_user_by_id(firebase_id):
                 "$project": {"_id": 0}
             }
         ]
+    elif user['status'] == "Student":
+        pipeline = [
+            {
+                "$match": {"firebase_id": firebase_id}
+            },
+            {
+                "$lookup": {
+                    "from": "bookings", 
+                    "localField": "firebase_id",  
+                    "foreignField": "studentId",  
+                    "as": "bookings"
+                }
+            },
+            {
+                "$project": {"_id": 0}
+            }
+        ]
+    else:
+        pipeline = [
+            {
+                "$match": {"firebase_id": firebase_id}
+            },
+            {
+                "$lookup": {
+                    "from": "bookings", 
+                    "localField": "firebase_id",  
+                    "foreignField": "tutorId",  
+                    "as": "bookings"
+                }
+            },
+            {
+                "$project": {"_id": 0}
+            }
+        ]
+
+    try:
 
         result = list(users_collection.aggregate(pipeline))
 
@@ -104,7 +131,7 @@ def get_user_by_id(firebase_id):
 #     except Exception as e:
 #         raise ValueError(str(e))
 
-    
+
 
 def signup():
     data = request.json
@@ -230,7 +257,6 @@ def updating_rating(user_firebase_id):
 
         users_collection.update_one({"firebase_id": user_firebase_id}, {"$set": {"rating":round(avgRating, 2)}})
         
-
 
 def update_profile_picture(firebase_id, profilePitureUrl):
     try:

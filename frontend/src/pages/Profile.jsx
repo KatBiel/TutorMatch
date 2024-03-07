@@ -20,7 +20,7 @@ import { addProfilePicture } from "../services/users";
 import { TutorReview } from "../components/TutorRating/TutorRating";
 import { TutorStarRating } from "../components/TutorRating/TutorStarRating";
 
-const DEFAULT_PFP = "https://res.cloudinary.com/dzkvzncgr/image/upload/v1707228333/ph2p8wvxud1qbsqqfxqk.png";
+const DEFAULT_PFP = "https://firebasestorage.googleapis.com/v0/b/tutormatch-e2a6a.appspot.com/o/profile-images%2FScreenshot%202024-03-07%20at%2010.12.22.png?alt=media&token=22295bdd-8c61-4837-aba0-6bc98985c0f3";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -252,6 +252,15 @@ const Profile = () => {
                                 <Card.Text>
                                 Let students know when you are available to tutor
                                 </Card.Text>
+                                
+                                <BookingRequestCalender 
+                                    tutorDetails = {userDetails}
+                                    loggedInUser = {mongoUser}
+                                    showSubmit = {false}
+                                    onRequestBooking={() => 
+                                        setRefresh(!refresh)} 
+                                    />
+                                
                                 <AddAvailability 
                                     firebaseId = {firebase_id} 
                                     idToken={idToken}
@@ -319,7 +328,8 @@ const Profile = () => {
                                 tutorDetails = {userDetails}
                                 loggedInUser = {mongoUser}
                                 onRequestBooking={() => 
-                                    setRefresh(!refresh)} />
+                                    setRefresh(!refresh)}
+                                showSubmit = {true}/>
 
                                 
                         </Card.Body>
