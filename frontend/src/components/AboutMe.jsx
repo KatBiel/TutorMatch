@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { updateBio } from '../services/users';
 
+
+
 const AboutMe = ({ userDetails, firebase_id, setUserDetails }) => {
     const [bio, setBio] = useState(userDetails.bio);
     const [Editing, setIsEditing] = useState(false)
@@ -28,7 +30,6 @@ const AboutMe = ({ userDetails, firebase_id, setUserDetails }) => {
     
       return (
         <div>
-
             
             {/* Updating Bio */}
             {Editing ? (

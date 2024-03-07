@@ -8,7 +8,7 @@ import { AddSubject } from "../components/AddSubject";
 import { AddAvailability } from "../components/AddAvailability";
 import { BookingRequestCalender } from "../components/BookingRequestCalender";
 import { RequestedBooking } from "../components/RequestedBooking";
-import { Card, CardTitle } from "react-bootstrap";
+import { Card, CardTitle, Button } from "react-bootstrap";
 import RequestedBookingsScrollable from "../components/RequestedBookingsScrollable"; 
 import UserProfile from "../components/User";
 import ProfileSubjects from "../components/ProfileSubjects";
@@ -129,6 +129,7 @@ const Profile = () => {
             setRefresh(!refresh)}/>
 
         </div>}
+
 
         {user.uid === firebase_id && userDetails.status === "Tutor" && userDetails.safeguarding === "Approved" && 
 
