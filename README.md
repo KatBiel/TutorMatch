@@ -1,8 +1,12 @@
 # Intro
 
 # Objectives
+The Makers final project is a chance to build anything a team can think of, using everything learnt on the course. Teams are self-directed, free to use any tech stack
+- build project in time for course finale, presenting to everyone else studying at makers
+
 
 # Project idea - user scenario, what problem does it solve?
+Our team's theme was 'tech for good', 
 
 # Development process
 Learning journey, what did, what learnt & how, highs/lows; behaviours & skills
