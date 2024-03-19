@@ -45,7 +45,7 @@ Technology-wise, this meant using Python and Javascript in combination, which we
 
 In terms of management, we practised the professional methodologies that we leant during the course to develop our idea and achieve our MVP and then go further than previous projects, adding extra features, setting up CI/CD and running the project on a cloud service.
 
-# Project idea - user scenario, what problem does it solve?
+# Project idea
 Our team was given the theme 'tech for good' for the project, which we developed into the idea of helping people from disadvantaged backgrounds. Tutoring can have profound impact on young people's lives so we decided to develop a website that connects volunteer tutors with students who require a little extra help. We found this idea attractive beacuse it was scalable. As an MVP, the idea had could be a simple tutor directory but had scope for expansion into a feature-rich interactive web application.
 
 # Development process
